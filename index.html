@@ -280,6 +280,11 @@
         <div class="week-selector">
             <select id="weekSelect">
                 <option value="all">所有單字</option>
+                <option value="highFrequency">高頻單字</option>
+                <option value="insectBodyParts">昆蟲身體部位</option>
+                <option value="sensesTextureAdjectives">五感與質地形容詞</option>
+                <option value="sensesVerbs">五感動詞</option>
+                <option value="plantThemeWords">植物主題</option>
                 <option value="week2">Week 2 - 植物與問句</option>
                 <option value="week4">Week 4 - 植物進階</option>
                 <option value="week5">Week 5 - 描述詞彙</option>
@@ -364,6 +369,62 @@
     <script>
         // 單字資料庫
         const vocabulary = {
+            // 高頻單字
+            highFrequency: [
+                {english: 'does', chinese: '做（第三人稱）'},
+                {english: 'each', chinese: '各；每個（限定詞）'},
+                {english: 'back', chinese: '後方'},
+                {english: 'can', chinese: '可以；能夠'},
+                {english: 'how', chinese: '如何'},
+                {english: 'inside', chinese: '裡面'},
+                {english: 'jump', chinese: '跳；躍'},
+                {english: 'than', chinese: '比較（介系詞）'},
+                {english: 'these', chinese: '這些'},
+                {english: 'those', chinese: '那些'},
+                {english: 'more', chinese: '更多；更加'},
+                {english: 'put', chinese: '放置'},
+                {english: 'see', chinese: '看（到）'},
+                {english: 'this', chinese: '這（個）'},
+                {english: 'always', chinese: '一直；永遠（頻率副詞）'},
+                {english: 'because', chinese: '因為（連接詞）'},
+                {english: 'before', chinese: '之前'},
+                {english: 'could', chinese: '能夠；可以（過去式）'},
+                {english: 'then', chinese: '然後'},
+            ],
+            // 昆蟲身體部位
+            insectBodyParts: [
+                {english: 'head', chinese: '頭部'},
+                {english: 'eyes', chinese: '眼睛'},
+                {english: 'wings', chinese: '翅膀'},
+                {english: 'legs', chinese: '腿部'},
+                {english: 'thorax', chinese: '胸部（昆蟲的）'},
+                {english: 'abdomen', chinese: '腹部'},
+                {english: 'antenna', chinese: '觸鬚'},
+                {english: 'queen ant', chinese: '蟻后'},
+                {english: 'worker ant', chinese: '工蟻'},
+                {english: 'soldier ant', chinese: '兵蟻'},
+            ],
+            // 五感與質地形容詞
+            sensesTextureAdjectives: [
+                {english: 'spiky', chinese: '有尖刺的'},
+                {english: 'prickly', chinese: '多刺的'},
+                {english: 'fuzzy', chinese: '毛茸茸的'},
+                {english: 'beautiful', chinese: '美麗的'},
+                {english: 'sparkly', chinese: '閃耀的'},
+                {english: 'shiny', chinese: '光亮的'},
+                {english: 'colourful', chinese: '色彩繽紛的'},
+                {english: 'handsome', chinese: '英俊的、漂亮的'},
+            ],
+            // 五感動詞 (此處只包含新詞彙，避免與現有 weekX 詞彙重複)
+            sensesVerbs: [
+                // 根據提供的單字列表，沒有新的、獨特的五感動詞未包含在現有 weekX 分類中。
+                // 此分類保留以備未來擴充。
+            ],
+            // 植物主題字彙 (此處只包含新詞彙，避免與現有 weekX 詞彙重複)
+            plantThemeWords: [
+                {english: 'seed', chinese: '種子'}, // 使用單數形式
+                {english: 'leaf', chinese: '葉'},   // 使用單數形式
+            ],
             week2: [
                 {english: 'is', chinese: '是（be動詞單數）'},
                 {english: 'are', chinese: '是（be動詞複數）'},
