@@ -405,7 +405,7 @@
                 {english: 'plant', chinese: '植物；種植'},
                 {english: 'water', chinese: '水'},
                 {english: 'grow', chinese: '成長、生長'},
-                {english: 'sunlight', chinese: '陽光'}
+                {english: 'sunlight', chinese: '陽光'},
                 {english: 'soil', chinese: '土壤'},
                 {english: 'size', chinese: '尺寸'},
                 {english: 'colour', chinese: '顏色'},
@@ -453,7 +453,7 @@
                 {english: 'giant', chinese: '巨大的'},
                 {english: 'huge', chinese: '龐大的'},
                 {english: 'tiny', chinese: '極小的'},
-                {english: 'small', chinese: '小的'}
+                {english: 'small', chinese: '小的'},
                 {english: 'feel', chinese: '感覺、感受'},
                 {english: 'look', chinese: '看'}
             ],
@@ -491,7 +491,7 @@
                 {english: 'sight', chinese: '視覺'},
                 {english: 'smell', chinese: '嗅覺；聞（到）'},
                 {english: 'hear', chinese: '聽（到）'},
-                {english: 'sound', chinese: '聲音'}
+                {english: 'sound', chinese: '聲音'},
                 {english: 'loud', chinese: '大聲'},
                 {english: 'quiet', chinese: '小聲；安靜'},
                 {english: 'silent', chinese: '無聲；寂靜'},
@@ -513,7 +513,7 @@
                 {english: 'sight', chinese: '視覺'},
                 {english: 'smell', chinese: '嗅覺；聞（到）'},
                 {english: 'hear', chinese: '聽（到）'},
-                {english: 'sound', chinese: '聲音'}
+                {english: 'sound', chinese: '聲音'},
                 {english: 'spicy', chinese: '辛辣的'},
                 {english: 'sour', chinese: '酸的'},
                 {english: 'sweet', chinese: '甜的'},
@@ -535,11 +535,11 @@
                 {english: 'sight', chinese: '視覺'},
                 {english: 'smell', chinese: '嗅覺；聞（到）'},
                 {english: 'hear', chinese: '聽（到）'},
-                {english: 'sound', chinese: '聲音'}
-                {english: 'soft', chinese: '柔軟的'}
-                {english: 'hard', chinese: '堅硬的'}
-                {english: 'bumpy', chinese: '凹凸的'}
-                {english: 'smooth', chinese: '平滑的'}
+                {english: 'sound', chinese: '聲音'},
+                {english: 'soft', chinese: '柔軟的'},
+                {english: 'hard', chinese: '堅硬的'},
+                {english: 'bumpy', chinese: '凹凸的'},
+                {english: 'smooth', chinese: '平滑的'},
                 {english: 'rough', chinese: '粗糙的'}
             ]
         };
@@ -582,6 +582,8 @@
             document.getElementById('gameArea').style.display = 'block';
             document.getElementById('total').textContent = currentWords.length;
             updateProgress();
+            document.getElementById('score').textContent = score; // Reset score display
+            document.getElementById('current').textContent = currentQuestion + 1; // Reset current question display
             
             // 隱藏所有遊戲區域
             document.getElementById('quizArea').style.display = 'none';
@@ -624,12 +626,13 @@
             });
 
             document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback'; // Reset feedback class
             document.getElementById('nextBtn').style.display = 'none';
         }
 
         function checkAnswer(selected, correct, btnElement) {
             const buttons = document.querySelectorAll('.option-btn');
-            buttons.forEach(btn => btn.onclick = null);
+            buttons.forEach(btn => btn.onclick = null); // Disable all buttons after selection
 
             if (selected === correct) {
                 btnElement.classList.add('correct');
@@ -661,19 +664,28 @@
             document.getElementById('typingQuestion').textContent = `請輸入「${word.chinese}」的英文：`;
             document.getElementById('typingInput').value = '';
             document.getElementById('typingFeedback').textContent = '';
+            document.getElementById('typingFeedback').className = 'feedback'; // Reset feedback class
             document.getElementById('typingNextBtn').style.display = 'none';
             
+            // Remove previous event listener to prevent multiple bindings
+            const oldInput = document.getElementById('typingInput');
+            const newInput = oldInput.cloneNode(true);
+            oldInput.parentNode.replaceChild(newInput, oldInput);
             document.getElementById('typingInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     checkTyping();
                 }
             });
+            document.getElementById('typingInput').focus(); // Auto-focus input field
         }
 
         function checkTyping() {
-            const input = document.getElementById('typingInput').value.trim().toLowerCase();
+            const inputElement = document.getElementById('typingInput');
+            const input = inputElement.value.trim().toLowerCase();
             const correct = currentWords[currentQuestion].english.toLowerCase();
 
+            inputElement.disabled = true; // Disable input after checking
+            
             if (input === correct) {
                 document.getElementById('typingFeedback').textContent = '正確！很棒！🎉';
                 document.getElementById('typingFeedback').className = 'feedback correct';
@@ -693,10 +705,16 @@
                 return;
             }
 
-            // 取4個單字進行配對
-            const matchWords = currentWords.slice(currentQuestion, Math.min(currentQuestion + 4, currentWords.length));
-            const englishWords = shuffleArray([...matchWords]);
-            const chineseWords = shuffleArray(matchWords.map(w => ({english: w.english, chinese: w.chinese})));
+            // 取4個單字進行配對，如果剩餘單字不足4個，則取所有剩餘單字
+            const wordsForMatch = currentWords.slice(currentQuestion, currentQuestion + 4);
+            // 確保每次配對遊戲都有足夠的單字，至少2個才能玩
+            if (wordsForMatch.length < 2) {
+                showFinalScore(); // 如果不足2個單字，結束遊戲
+                return;
+            }
+
+            const englishWords = shuffleArray(wordsForMatch.map(w => ({originalEnglish: w.english, display: w.english})));
+            const chineseWords = shuffleArray(wordsForMatch.map(w => ({originalEnglish: w.english, display: w.chinese})));
 
             document.getElementById('englishWords').innerHTML = '';
             document.getElementById('chineseWords').innerHTML = '';
@@ -704,80 +722,108 @@
             englishWords.forEach(word => {
                 const div = document.createElement('div');
                 div.className = 'match-item';
-                div.textContent = word.english;
-                div.onclick = () => selectMatchItem(div, 'english', word.english);
+                div.textContent = word.display;
+                div.dataset.originalEnglish = word.originalEnglish; // Store original English for matching
+                div.onclick = () => selectMatchItem(div, 'english', word.originalEnglish);
                 document.getElementById('englishWords').appendChild(div);
             });
 
             chineseWords.forEach(word => {
                 const div = document.createElement('div');
                 div.className = 'match-item';
-                div.textContent = word.chinese;
-                div.onclick = () => selectMatchItem(div, 'chinese', word.english);
+                div.textContent = word.display;
+                div.dataset.originalEnglish = word.originalEnglish; // Store original English for matching
+                div.onclick = () => selectMatchItem(div, 'chinese', word.originalEnglish);
                 document.getElementById('chineseWords').appendChild(div);
             });
 
-            matchPairs = [];
+            selectedMatch = null; // Reset selection
+            selectedType = ''; // Reset selection type
+            matchPairs = []; // Reset matched pairs for this round
             document.getElementById('matchFeedback').textContent = '';
+            document.getElementById('matchFeedback').className = 'feedback'; // Reset feedback class
             document.getElementById('matchNextBtn').style.display = 'none';
         }
 
-        let selectedMatch = null;
-        let selectedType = '';
+        let selectedMatch = null; // {element: HTMLElement, originalEnglish: string}
+        let selectedType = ''; // 'english' or 'chinese'
 
-        function selectMatchItem(element, type, englishWord) {
-            if (element.classList.contains('matched')) return;
+        function selectMatchItem(element, type, originalEnglishWord) {
+            if (element.classList.contains('matched')) return; // Already matched, do nothing
 
-            // 清除之前的選擇
-            document.querySelectorAll('.match-item.selected').forEach(item => {
-                item.classList.remove('selected');
+            // Remove 'selected' class from previously selected item of the same type
+            document.querySelectorAll(`.match-column .match-item.selected`).forEach(item => {
+                if (item !== element) { // Don't deselect the current element if it was already selected
+                     item.classList.remove('selected');
+                }
             });
 
+
             if (selectedMatch && selectedType !== type) {
-                // 檢查配對
-                const isCorrect = selectedMatch.englishWord === englishWord;
+                // We have a selected item from the other column, try to match
+                const isCorrect = selectedMatch.originalEnglish === originalEnglishWord;
                 
                 if (isCorrect) {
                     selectedMatch.element.classList.add('matched');
                     element.classList.add('matched');
-                    matchPairs.push({english: englishWord, matched: true});
+                    document.getElementById('matchFeedback').textContent = '配對成功！👍';
+                    document.getElementById('matchFeedback').className = 'feedback correct';
                     score++;
-                    
-                    // 檢查是否全部配對完成
-                    if (document.querySelectorAll('.match-item.matched').length === document.querySelectorAll('.match-item').length) {
+                    document.getElementById('score').textContent = score;
+
+                    // Check if all pairs in the current round are matched
+                    const currentRoundItems = document.querySelectorAll('#englishWords .match-item').length;
+                    const matchedItems = document.querySelectorAll('.match-item.matched').length;
+
+                    if (matchedItems === currentRoundItems * 2) { // Each pair consists of 2 items
                         document.getElementById('matchFeedback').textContent = '全部配對正確！🎉';
                         document.getElementById('matchFeedback').className = 'feedback correct';
                         document.getElementById('matchNextBtn').style.display = 'block';
-                        currentQuestion += 4;
+                        currentQuestion += currentRoundItems; // Advance question by number of words in this round
                     }
                 } else {
                     document.getElementById('matchFeedback').textContent = '配對錯誤，請再試一次！';
                     document.getElementById('matchFeedback').className = 'feedback wrong';
+                    // Briefly highlight wrong selection then remove
+                    element.classList.add('wrong');
+                    selectedMatch.element.classList.add('wrong');
+                    setTimeout(() => {
+                        element.classList.remove('wrong');
+                        selectedMatch.element.classList.remove('wrong');
+                    }, 500);
                 }
                 
-                selectedMatch = null;
+                selectedMatch = null; // Reset for next selection
                 selectedType = '';
-                document.getElementById('score').textContent = score;
             } else {
+                // Select the current item
                 element.classList.add('selected');
-                selectedMatch = {element: element, englishWord: englishWord};
+                selectedMatch = {element: element, originalEnglish: originalEnglishWord};
                 selectedType = type;
+                document.getElementById('matchFeedback').textContent = ''; // Clear previous feedback
+                document.getElementById('matchFeedback').className = 'feedback'; // Reset feedback class
             }
         }
 
         function nextQuestion() {
-            if (currentGame === 'match') {
-                // match遊戲在selectMatchItem中已經處理了currentQuestion的增加
-            } else {
+            // For match game, currentQuestion is already advanced in selectMatchItem
+            // For quiz and typing, increment here
+            if (currentGame === 'quiz' || currentGame === 'typing') {
                 currentQuestion++;
             }
             
             document.getElementById('current').textContent = Math.min(currentQuestion + 1, currentWords.length);
             updateProgress();
 
+            if (currentQuestion >= currentWords.length) {
+                showFinalScore();
+                return;
+            }
+
             if (currentGame === 'quiz') {
                 showQuizQuestion();
             } else if (currentGame === 'typing') {
+                document.getElementById('typingInput').disabled = false; // Re-enable input for next question
                 showTypingQuestion();
             } else if (currentGame === 'match') {
                 showMatchGame();
@@ -803,21 +849,80 @@
                 message = '加油！多練習就會進步！📚';
             }
 
-            document.getElementById('question').textContent = '遊戲結束！';
-            document.getElementById('options').innerHTML = '';
-            document.getElementById('typingQuestion').textContent = '遊戲結束！';
-            document.getElementById('feedback').innerHTML = `
-                <h2>${message}</h2>
-                <p>總分：${score}/${currentWords.length} (${percentage}%)</p>
+            // Hide game areas and show final score in feedback div
+            document.getElementById('quizArea').style.display = 'none';
+            document.getElementById('typingArea').style.display = 'none';
+            document.getElementById('matchArea').style.display = 'none';
+
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = `
+                <div class="feedback correct" style="display:block;">
+                    <h2>遊戲結束！</h2>
+                    <p>${message}</p>
+                    <p>總分：${score}/${currentWords.length} (${percentage}%)</p>
+                </div>
+                <button class="submit-btn" onclick="backToMenu()">回到主選單</button>
             `;
-            document.getElementById('feedback').className = 'feedback correct';
-            document.getElementById('nextBtn').style.display = 'none';
-            document.getElementById('typingNextBtn').style.display = 'none';
-            document.getElementById('matchNextBtn').style.display = 'none';
+            gameArea.style.display = 'block'; // Make sure gameArea is visible to show score
         }
 
         function backToMenu() {
-            document.getElementById('gameArea').style.display = 'none';
+            // Reset game area to its initial state
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = `
+                <div class="score-board">
+                    <div class="score-item">
+                        <div class="score-number" id="score">0</div>
+                        <div>得分</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-number" id="current">1</div>
+                        <div>第幾題</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-number" id="total">10</div>
+                        <div>總題數</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+
+                <div id="quizArea" class="question-card">
+                    <div class="question" id="question"></div>
+                    <div class="options" id="options"></div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="submit-btn" id="nextBtn" onclick="nextQuestion()" style="display:none;">下一題</button>
+                </div>
+
+                <div id="typingArea" class="question-card" style="display:none;">
+                    <div class="question" id="typingQuestion"></div>
+                    <input type="text" class="input-box" id="typingInput" placeholder="請輸入英文單字">
+                    <button class="submit-btn" onclick="checkTyping()">確認答案</button>
+                    <div class="feedback" id="typingFeedback"></div>
+                    <button class="submit-btn" id="typingNextBtn" onclick="nextQuestion()" style="display:none;">下一題</button>
+                </div>
+
+                <div id="matchArea" style="display:none;">
+                    <h3>點選配對的英文和中文</h3>
+                    <div class="match-area">
+                        <div class="match-column">
+                            <h4>英文單字</h4>
+                            <div id="englishWords"></div>
+                        </div>
+                        <div class="match-column">
+                            <h4>中文意思</h4>
+                            <div id="chineseWords"></div>
+                        </div>
+                    </div>
+                    <div class="feedback" id="matchFeedback"></div>
+                    <button class="submit-btn" id="matchNextBtn" onclick="nextQuestion()" style="display:none;">下一組</button>
+                </div>
+
+                <button class="submit-btn" onclick="backToMenu()">回到主選單</button>
+            `;
+            gameArea.style.display = 'none'; // Hide the game area again
         }
 
         function getWrongAnswers(correctAnswer, count) {
@@ -830,7 +935,9 @@
                 });
             }
             
-            return shuffleArray(allAnswers).slice(0, count);
+            // Filter out duplicates and then shuffle
+            const uniqueAnswers = [...new Set(allAnswers)];
+            return shuffleArray(uniqueAnswers).slice(0, count);
         }
 
         function shuffleArray(array) {
