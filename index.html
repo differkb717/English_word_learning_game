@@ -504,6 +504,11 @@
                 {english: 'colourful', chinese: '色彩繽紛的'},
                 {english: 'handsome', chinese: '英俊的、漂亮的'},
             ],
+            // 五感動詞 (Senses Verbs)
+            sensesVerbs: [
+                // 根據提供的單字列表，沒有新的、獨特的五感動詞未包含在現有 weekX 分類中。
+                // 此分類保留以備未來擴充。
+            ],
             // 植物主題字彙 (Plant Theme Words)
             plantThemeWords: [
                 {english: 'seed', chinese: '種子'}, // 使用單數形式
@@ -531,7 +536,10 @@
                 {english: 'hard', chinese: '堅硬的'},
                 {english: 'giant', chinese: '巨大的'},
                 {english: 'huge', chinese: '龐大的'},
-/
+/* This line was causing a syntax error! It was an incomplete comment.
+                {english: 'tiny', chinese: '極小的'},
+                {english: 'small', chinese: '小的'}
+*/
             ],
             week6: [
                 {english: 'feel', chinese: '感覺、感受'},
@@ -571,7 +579,10 @@
                 {english: 'soft', chinese: '柔軟的'},
                 {english: 'hard', chinese: '堅硬的'},
                 {english: 'bumpy', chinese: '凹凸的'},
-
+/* This line was causing a syntax error! It was an incomplete comment.
+                {english: 'smooth', chinese: '平滑的'},
+                {english: 'rough', chinese: '粗糙的'}
+*/
             ]
         };
 
@@ -590,6 +601,7 @@
             const weekSelect = document.getElementById('weekSelect').value;
             let words = [];
             
+            console.log(`%cgetSelectedWords: 選擇的週次或分類是 ${weekSelect}`, 'color: green;'); // Debug log
             if (weekSelect === 'all') {
                 // 如果選擇「所有單字」，則合併所有類別的單字
                 for (let category in vocabulary) {
@@ -610,6 +622,7 @@
                     seen.add(key);
                 }
             });
+            console.log(`%cgetSelectedWords: 獲取到 ${uniqueWords.length} 個獨特單字`, 'color: green;'); // Debug log
             return uniqueWords;
         }
 
@@ -618,6 +631,7 @@
          * @param {string} gameType - 遊戲類型 ('quiz', 'typing', 'match')
          */
         function startGame(gameType) {
+            console.log(`%cstartGame: 遊戲類型 ${gameType} 即將開始`, 'color: green; font-weight: bold;'); // Debug log
             currentGame = gameType;
             selectedWords = getSelectedWords(); // 獲取選定的單字
 
@@ -625,8 +639,10 @@
             if (selectedWords.length === 0) {
                 // 使用自定義訊息框替代 alert
                 showMessageBox('沒有可用的單字，請選擇其他週次或分類！');
+                console.log('%cstartGame: 沒有可用的單字，顯示訊息框', 'color: red;'); // Debug log
                 return;
             }
+            console.log(`%cstartGame: 將使用 ${selectedWords.length} 個單字進行遊戲`, 'color: green;'); // Debug log
 
             // 打亂單字順序並取前10個（或所有，如果不足10個）
             currentWords = shuffleArray([...selectedWords]).slice(0, Math.min(10, selectedWords.length));
@@ -655,12 +671,14 @@
                 document.getElementById('matchArea').style.display = 'block';
                 showMatchGame();
             }
+            console.log(`%cstartGame: 遊戲模式 ${gameType} 已設定`, 'color: green;'); // Debug log
         }
 
         /**
          * 顯示選擇題問題
          */
         function showQuizQuestion() {
+            console.log(`%cshowQuizQuestion: 顯示第 ${currentQuestion + 1} 題`, 'color: green;'); // Debug log
             if (currentQuestion >= currentWords.length) {
                 showFinalScore();
                 return;
@@ -699,6 +717,7 @@
          * @param {HTMLElement} btnElement - 玩家點擊的按鈕元素
          */
         function checkAnswer(selected, correct, btnElement) {
+            console.log(`%ccheckAnswer: 選擇了 "${selected}", 正確答案是 "${correct}"`, 'color: green;'); // Debug log
             const buttons = document.querySelectorAll('.option-btn');
             buttons.forEach(btn => btn.onclick = null); // 點擊後禁用所有選項按鈕
 
@@ -721,12 +740,14 @@
 
             document.getElementById('score').textContent = score; // 更新得分顯示
             document.getElementById('nextBtn').style.display = 'block'; // 顯示下一題按鈕
+            console.log(`%ccheckAnswer: 目前得分 ${score}`, 'color: green;'); // Debug log
         }
 
         /**
          * 顯示拼字練習問題
          */
         function showTypingQuestion() {
+            console.log(`%cshowTypingQuestion: 顯示第 ${currentQuestion + 1} 題`, 'color: green;'); // Debug log
             if (currentQuestion >= currentWords.length) {
                 showFinalScore();
                 return;
@@ -756,6 +777,7 @@
          * 檢查拼字答案
          */
         function checkTyping() {
+            console.log(`%ccheckTyping: 檢查拼字答案`, 'color: green;'); // Debug log
             const inputElement = document.getElementById('typingInput');
             const input = inputElement.value.trim().toLowerCase(); // 獲取輸入並轉為小寫
             const correct = currentWords[currentQuestion].english.toLowerCase(); // 正確答案轉為小寫
@@ -773,16 +795,19 @@
 
             document.getElementById('score').textContent = score;
             document.getElementById('typingNextBtn').style.display = 'block';
+            console.log(`%ccheckTyping: 目前得分 ${score}`, 'color: green;'); // Debug log
         }
 
         /**
          * 顯示配對遊戲
          */
         function showMatchGame() {
+            console.log(`%cshowMatchGame: 顯示配對遊戲`, 'color: green;'); // Debug log
             // 從 currentWords 中取最多4個單字進行配對
             const wordsForMatch = currentWords.slice(currentQuestion, currentQuestion + 4);
             // 確保每次配對遊戲都有足夠的單字，至少2個才能玩
             if (wordsForMatch.length < 2) {
+                console.log('%cshowMatchGame: 單字不足2個，結束配對遊戲', 'color: red;'); // Debug log
                 showFinalScore(); // 如果不足2個單字，結束遊戲
                 return;
             }
@@ -833,7 +858,11 @@
          * @param {string} originalEnglishWord - 該項目對應的原始英文單字
          */
         function selectMatchItem(element, type, originalEnglishWord) {
-            if (element.classList.contains('matched')) return; // 如果已經配對成功，則不做任何事
+            console.log(`%cselectMatchItem: 點擊了 ${type} 類型項目: "${element.textContent}", 對應英文: "${originalEnglishWord}"`, 'color: green;'); // Debug log
+            if (element.classList.contains('matched')) {
+                console.log('%cselectMatchItem: 項目已配對，不做任何事', 'color: orange;'); // Debug log
+                return; // 如果已經配對成功，則不做任何事
+            }
 
             // 移除同類型其他已選中項目的 'selected' class
             document.querySelectorAll(`.match-column .match-item.selected`).forEach(item => {
@@ -854,16 +883,18 @@
                     document.getElementById('matchFeedback').className = 'feedback correct';
                     score++; // 增加得分
                     document.getElementById('score').textContent = score;
+                    console.log(`%cselectMatchItem: 配對正確！目前得分 ${score}`, 'color: green; font-weight: bold;'); // Debug log
 
                     // 檢查本輪是否所有配對都已完成
                     const currentRoundItemsCount = document.querySelectorAll('#englishWords .match-item').length;
                     const matchedItemsCount = document.querySelectorAll('.match-item.matched').length;
 
                     if (matchedItemsCount === currentRoundItemsCount * 2) { // 每對包含2個項目
-                        document.getElementById('matchFeedback').textContent = '全部配對正確！�';
+                        document.getElementById('matchFeedback').textContent = '全部配對正確！🎉';
                         document.getElementById('matchFeedback').className = 'feedback correct';
                         document.getElementById('matchNextBtn').style.display = 'block'; // 顯示下一組按鈕
                         currentQuestion += currentRoundItemsCount; // 根據本輪單字數量推進題數
+                        console.log('%cselectMatchItem: 本輪所有單字已配對成功，顯示下一組按鈕', 'color: green; font-weight: bold;'); // Debug log
                     }
                 } else {
                     document.getElementById('matchFeedback').textContent = '配對錯誤，請再試一次！';
@@ -875,6 +906,7 @@
                         element.classList.remove('wrong');
                         selectedMatch.element.classList.remove('wrong');
                     }, 500);
+                    console.log('%cselectMatchItem: 配對錯誤', 'color: red;'); // Debug log
                 }
                 
                 selectedMatch = null; // 重置選中狀態
@@ -886,6 +918,7 @@
                 selectedType = type;
                 document.getElementById('matchFeedback').textContent = ''; // 清除之前的回饋訊息
                 document.getElementById('matchFeedback').className = 'feedback';
+                console.log(`%cselectMatchItem: 選中了第一個項目: "${element.textContent}", 類型: ${type}`, 'color: green;'); // Debug log
             }
         }
 
@@ -893,6 +926,7 @@
          * 進入下一題或下一組配對
          */
         function nextQuestion() {
+            console.log(`%cnextQuestion: 進入下一題/組。當前題數 ${currentQuestion + 1}`, 'color: green;'); // Debug log
             // 配對遊戲的 currentQuestion 已在 selectMatchItem 中更新
             // 選擇題和拼字練習在此處更新
             if (currentGame === 'quiz' || currentGame === 'typing') {
@@ -905,6 +939,7 @@
 
             if (currentQuestion >= currentWords.length) {
                 showFinalScore(); // 遊戲結束
+                console.log('%cnextQuestion: 所有題目已完成，顯示最終得分', 'color: green; font-weight: bold;'); // Debug log
                 return;
             }
 
@@ -925,12 +960,14 @@
         function updateProgress() {
             const progress = (currentQuestion / currentWords.length) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
+            console.log(`%cupdateProgress: 進度條更新至 ${progress.toFixed(2)}%`, 'color: green;'); // Debug log
         }
 
         /**
          * 顯示最終得分和遊戲結束訊息
          */
         function showFinalScore() {
+            console.log(`%cshowFinalScore: 遊戲結束！`, 'color: green; font-weight: bold;'); // Debug log
             const percentage = Math.round((score / currentWords.length) * 100);
             let message = '';
             
@@ -961,14 +998,17 @@
                 <button class="submit-btn" onclick="backToMenu()">回到主選單</button>
             `;
             gameArea.style.display = 'block'; // 確保遊戲區域可見以顯示分數
+            console.log(`%cshowFinalScore: 最終得分 ${score}/${currentWords.length} (${percentage}%)`, 'color: green; font-weight: bold;'); // Debug log
         }
 
         /**
          * 返回主選單
          */
         function backToMenu() {
+            console.log(`%cbackToMenu: 返回主選單`, 'color: green; font-weight: bold;'); // Debug log
             // 重置遊戲區域到初始狀態
             const gameArea = document.getElementById('gameArea');
+            // 由於 showFinalScore 會替換 gameArea 的 innerHTML，所以這裡需要重新構建其內容
             gameArea.innerHTML = `
                 <div class="score-board">
                     <div class="score-item">
@@ -1023,7 +1063,7 @@
                 <button class="submit-btn" onclick="backToMenu()">回到主選單</button>
             `;
             gameArea.style.display = 'none'; // 隱藏遊戲區域
-            // 重新初始化週數選擇器（如果需要）
+            // 重新初始化週數選擇器
             document.getElementById('weekSelect').value = 'all'; 
         }
 
@@ -1068,8 +1108,6 @@
          * @param {string} message - 顯示的訊息
          */
         function showMessageBox(message) {
-            // 這裡可以實現一個更美觀的模態框，而不是簡單的 console.log
-            // 例如：創建一個 div 元素，設置樣式並添加到 body，然後在用戶點擊確定後移除
             const existingMessageBox = document.getElementById('customMessageBox');
             if (existingMessageBox) {
                 existingMessageBox.remove();
