@@ -5,73 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>國小英文單字練習遊戲</title>
     <style>
+        /* 基本重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* 頁面整體樣式 */
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 漸層背景 */
+            min-height: 100vh; /* 確保全高 */
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; /* 水平居中 */
             padding: 20px;
         }
 
+        /* 容器樣式 */
         .container {
             max-width: 800px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95); /* 半透明白色背景 */
+            border-radius: 20px; /* 圓角 */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* 陰影 */
             padding: 30px;
             text-align: center;
         }
 
+        /* 標題樣式 */
         h1 {
             color: #4a5bd4;
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* 文字陰影 */
         }
 
+        /* 副標題樣式 */
         .subtitle {
             color: #666;
             font-size: 1.2em;
             margin-bottom: 30px;
         }
 
+        /* 遊戲模式選擇區 */
         .game-modes {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 自適應網格 */
+            gap: 20px; /* 間距 */
             margin-bottom: 30px;
         }
 
+        /* 模式按鈕通用樣式 */
         .mode-btn {
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            background: linear-gradient(45deg, #ff6b6b, #ffa500); /* 漸層背景 */
             color: white;
             border: none;
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 15px; /* 圓角 */
             font-size: 1.1em;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease; /* 過渡動畫 */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* 陰影 */
         }
 
+        /* 模式按鈕懸停效果 */
         .mode-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px); /* 向上移動 */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* 更大的陰影 */
         }
 
+        /* 各模式按鈕的特定顏色 */
         .mode-btn.quiz { background: linear-gradient(45deg, #4facfe, #00f2fe); }
         .mode-btn.match { background: linear-gradient(45deg, #43e97b, #38f9d7); }
         .mode-btn.typing { background: linear-gradient(45deg, #fa709a, #fee140); }
 
+        /* 週數選擇器樣式 */
         .week-selector {
             margin: 20px 0;
         }
@@ -82,13 +92,17 @@
             border: 2px solid #ddd;
             font-size: 1.1em;
             background: white;
+            cursor: pointer;
         }
 
+        /* 遊戲區域樣式 */
         .game-area {
-            display: none;
+            display: none; /* 預設隱藏 */
             margin-top: 30px;
+            width: 100%; /* 確保佔滿寬度 */
         }
 
+        /* 問題卡片樣式 */
         .question-card {
             background: white;
             border-radius: 15px;
@@ -97,12 +111,14 @@
             margin-bottom: 20px;
         }
 
+        /* 問題文本樣式 */
         .question {
             font-size: 2em;
             color: #333;
             margin-bottom: 20px;
         }
 
+        /* 選項區塊樣式 */
         .options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -110,6 +126,7 @@
             margin: 20px 0;
         }
 
+        /* 選項按鈕樣式 */
         .option-btn {
             background: #f8f9ff;
             border: 3px solid #e0e6ff;
@@ -118,25 +135,30 @@
             font-size: 1.1em;
             cursor: pointer;
             transition: all 0.3s ease;
+            word-break: break-word; /* 防止文字溢出 */
         }
 
+        /* 選項按鈕懸停效果 */
         .option-btn:hover {
             background: #e0e6ff;
-            transform: scale(1.05);
+            transform: scale(1.03); /* 輕微放大 */
         }
 
+        /* 正確選項樣式 */
         .option-btn.correct {
             background: #d4edda;
             border-color: #28a745;
             color: #155724;
         }
 
+        /* 錯誤選項樣式 */
         .option-btn.wrong {
             background: #f8d7da;
             border-color: #dc3545;
             color: #721c24;
         }
 
+        /* 分數板樣式 */
         .score-board {
             display: flex;
             justify-content: space-around;
@@ -147,6 +169,7 @@
             margin-bottom: 20px;
         }
 
+        /* 分數項目樣式 */
         .score-item {
             text-align: center;
         }
@@ -156,6 +179,7 @@
             font-weight: bold;
         }
 
+        /* 輸入框樣式 */
         .input-box {
             width: 100%;
             max-width: 400px;
@@ -168,6 +192,7 @@
             text-align: center;
         }
 
+        /* 提交按鈕通用樣式 */
         .submit-btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
@@ -180,36 +205,43 @@
             transition: all 0.3s ease;
         }
 
+        /* 提交按鈕懸停效果 */
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        /* 回饋訊息樣式 */
         .feedback {
             font-size: 1.5em;
             font-weight: bold;
             margin: 20px 0;
             padding: 15px;
             border-radius: 10px;
+            word-break: break-word; /* 防止文字溢出 */
         }
 
+        /* 正確回饋訊息樣式 */
         .feedback.correct {
             background: #d4edda;
             color: #155724;
         }
 
+        /* 錯誤回饋訊息樣式 */
         .feedback.wrong {
             background: #f8d7da;
             color: #721c24;
         }
 
+        /* 配對遊戲區塊樣式 */
         .match-area {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr; /* 兩欄佈局 */
             gap: 20px;
             margin: 20px 0;
         }
 
+        /* 配對欄位樣式 */
         .match-column {
             background: #f8f9ff;
             padding: 20px;
@@ -217,6 +249,7 @@
             border: 2px solid #e0e6ff;
         }
 
+        /* 配對項目樣式 */
         .match-item {
             background: white;
             padding: 15px;
@@ -224,24 +257,30 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 2px solid transparent; /* 預設透明邊框 */
+            word-break: break-word; /* 防止文字溢出 */
         }
 
+        /* 配對項目懸停效果 */
         .match-item:hover {
-            transform: scale(1.05);
+            transform: scale(1.03); /* 輕微放大 */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
+        /* 配對項目選中樣式 */
         .match-item.selected {
             border-color: #4facfe;
             background: #e6f3ff;
         }
 
+        /* 配對項目已配對樣式 */
         .match-item.matched {
             background: #d4edda;
             border-color: #28a745;
+            cursor: default; /* 已配對的項目不可點擊 */
         }
 
+        /* 進度條樣式 */
         .progress-bar {
             width: 100%;
             height: 10px;
@@ -257,17 +296,18 @@
             transition: width 0.3s ease;
         }
 
+        /* RWD 響應式設計 */
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
             }
             
             .match-area {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* 小螢幕改為單欄 */
             }
             
             .options {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* 小螢幕改為單欄 */
             }
         }
     </style>
@@ -282,6 +322,9 @@
                 <option value="all">所有單字</option>
                 <option value="highFrequency">高頻單字</option>
                 <option value="insectBodyParts">昆蟲身體部位</option>
+                <option value="antColony">蟻群角色與生命週期</option> <!-- 新增類別 -->
+                <option value="otherInsectsAndFeatures">其他昆蟲與特徵</option> <!-- 新增類別 -->
+                <option value="directionAndDescriptors">方位與描述詞</option> <!-- 新增類別 -->
                 <option value="sensesTextureAdjectives">五感與質地形容詞</option>
                 <option value="sensesVerbs">五感動詞</option>
                 <option value="plantThemeWords">植物主題</option>
@@ -369,10 +412,10 @@
     <script>
         // 單字資料庫
         const vocabulary = {
-            // 高頻單字
+            // 高頻單字 (High Frequency Words)
             highFrequency: [
                 {english: 'does', chinese: '做（第三人稱）'},
-                {english: 'each', chinese: '各；每個（限定詞）'},
+                {english: 'each', chinese: '各；每個'},
                 {english: 'back', chinese: '後方'},
                 {english: 'can', chinese: '可以；能夠'},
                 {english: 'how', chinese: '如何'},
@@ -385,49 +428,12 @@
                 {english: 'put', chinese: '放置'},
                 {english: 'see', chinese: '看（到）'},
                 {english: 'this', chinese: '這（個）'},
-                {english: 'always', chinese: '一直；永遠（頻率副詞）'},
-                {english: 'because', chinese: '因為（連接詞）'},
+                {english: 'always', chinese: '一直；永遠'},
+                {english: 'because', chinese: '因為'},
                 {english: 'before', chinese: '之前'},
-                {english: 'could', chinese: '能夠；可以（過去式）'},
-                {english: 'then', chinese: '然後'},
-            ],
-            // 昆蟲身體部位
-            insectBodyParts: [
-                {english: 'head', chinese: '頭部'},
-                {english: 'eyes', chinese: '眼睛'},
-                {english: 'wings', chinese: '翅膀'},
-                {english: 'legs', chinese: '腿部'},
-                {english: 'thorax', chinese: '胸部（昆蟲的）'},
-                {english: 'abdomen', chinese: '腹部'},
-                {english: 'antenna', chinese: '觸鬚'},
-                {english: 'queen ant', chinese: '蟻后'},
-                {english: 'worker ant', chinese: '工蟻'},
-                {english: 'soldier ant', chinese: '兵蟻'},
-            ],
-            // 五感與質地形容詞
-            sensesTextureAdjectives: [
-                {english: 'spiky', chinese: '有尖刺的'},
-                {english: 'prickly', chinese: '多刺的'},
-                {english: 'fuzzy', chinese: '毛茸茸的'},
-                {english: 'beautiful', chinese: '美麗的'},
-                {english: 'sparkly', chinese: '閃耀的'},
-                {english: 'shiny', chinese: '光亮的'},
-                {english: 'colourful', chinese: '色彩繽紛的'},
-                {english: 'handsome', chinese: '英俊的、漂亮的'},
-            ],
-            // 五感動詞 (此處只包含新詞彙，避免與現有 weekX 詞彙重複)
-            sensesVerbs: [
-                // 根據提供的單字列表，沒有新的、獨特的五感動詞未包含在現有 weekX 分類中。
-                // 此分類保留以備未來擴充。
-            ],
-            // 植物主題字彙 (此處只包含新詞彙，避免與現有 weekX 詞彙重複)
-            plantThemeWords: [
-                {english: 'seed', chinese: '種子'}, // 使用單數形式
-                {english: 'leaf', chinese: '葉'},   // 使用單數形式
-            ],
-            week2: [
-                {english: 'is', chinese: '是（be動詞單數）'},
-                {english: 'are', chinese: '是（be動詞複數）'},
+                {english: 'could', chinese: '可以（過去式）'},
+                {english: 'is', chinese: '是（單數）'},
+                {english: 'are', chinese: '是（複數）'},
                 {english: 'has', chinese: '擁有（單數）'},
                 {english: 'have', chinese: '擁有（複數）'},
                 {english: 'who', chinese: '誰'},
@@ -435,9 +441,76 @@
                 {english: 'where', chinese: '哪裡'},
                 {english: 'when', chinese: '何時'},
                 {english: 'first', chinese: '首先'},
-                {english: 'next', chinese: '之後'},
+                {english: 'next', chinese: '接下來'},
+                {english: 'then', chinese: '然後'},
                 {english: 'last', chinese: '最後'},
-                {english: 'seeds', chinese: '種子'},
+                {english: 'would', chinese: '會（意願/假設）'},
+                {english: 'there', chinese: '那裡'},
+                {english: 'their', chinese: '他們的'}
+            ],
+            // 昆蟲身體部位 (Insect Body Parts)
+            insectBodyParts: [
+                {english: 'head', chinese: '頭部'},
+                {english: 'eye', chinese: '眼睛'},
+                {english: 'eyes', chinese: '眼睛'},
+                {english: 'antenna', chinese: '觸角'},
+                {english: 'antennae', chinese: '觸角（複數）'},
+                {english: 'thorax', chinese: '胸部（昆蟲）'},
+                {english: 'abdomen', chinese: '腹部'},
+                {english: 'legs', chinese: '腿'},
+                {english: 'leg', chinese: '腿（單數）'},
+                {english: 'wings', chinese: '翅膀'},
+                {english: 'wing', chinese: '翅膀（單數）'},
+                {english: 'mandibles', chinese: '下顎'}
+            ],
+            // 蟻群角色與生命週期 (Ant Colony Roles and Life Cycle) - 新增類別
+            antColony: [
+                {english: 'queen ant', chinese: '蟻后'},
+                {english: 'worker ant', chinese: '工蟻'},
+                {english: 'soldier ant', chinese: '兵蟻'},
+                {english: 'male', chinese: '雄蟲'},
+                {english: 'egg', chinese: '卵'},
+                {english: 'eggs', chinese: '卵'},
+                {english: 'larvae', chinese: '幼蟲'},
+                {english: 'pupae', chinese: '蛹'}
+            ],
+            // 其他昆蟲與特徵 (Other Insects and Features) - 新增類別
+            otherInsectsAndFeatures: [
+                {english: 'ladybug', chinese: '瓢蟲'},
+                {english: 'stripes', chinese: '條紋'},
+                {english: 'spots', chinese: '斑點'},
+                {english: 'caterpillar', chinese: '毛毛蟲'},
+                {english: 'butterfly', chinese: '蝴蝶'}
+            ],
+            // 方位與描述詞 (Direction and Descriptors) - 新增類別
+            directionAndDescriptors: [
+                {english: 'spiky', chinese: '有尖刺的'},
+                {english: 'fuzzy', chinese: '毛茸茸的'},
+                {english: 'smooth', chinese: '平滑的'},
+                {english: 'rough', chinese: '粗糙的'},
+                {english: 'big', chinese: '大的'},
+                {english: 'tiny', chinese: '極小的'},
+                {english: 'small', chinese: '小的'},
+                {english: 'above', chinese: '在……上方'},
+                {english: 'under', chinese: '在……下面'},
+                {english: 'over', chinese: '在……上方；超過'}
+            ],
+            // 五感與質地形容詞 (Senses and Texture Adjectives) - 移除已移至新類別的單字
+            sensesTextureAdjectives: [
+                {english: 'prickly', chinese: '多刺的'},
+                {english: 'beautiful', chinese: '美麗的'},
+                {english: 'sparkly', chinese: '閃耀的'},
+                {english: 'shiny', chinese: '光亮的'},
+                {english: 'colourful', chinese: '色彩繽紛的'},
+                {english: 'handsome', chinese: '英俊的、漂亮的'},
+            ],
+            // 植物主題字彙 (Plant Theme Words)
+            plantThemeWords: [
+                {english: 'seed', chinese: '種子'}, // 使用單數形式
+                {english: 'leaf', chinese: '葉'},   // 使用單數形式
+            ],
+            week2: [
+                
                 {english: 'roots', chinese: '根'},
                 {english: 'stem', chinese: '莖'},
                 {english: 'leaves', chinese: '葉'},
@@ -448,73 +521,19 @@
                 {english: 'sunlight', chinese: '陽光'}
             ],
             week4: [
-                {english: 'are', chinese: '是（be動詞複數）'},
-                {english: 'has', chinese: '擁有（單數）'},
-                {english: 'have', chinese: '擁有（複數）'},
-                {english: 'who', chinese: '誰'},
-                {english: 'what', chinese: '什麼'},
-                {english: 'where', chinese: '哪裡'},
-                {english: 'when', chinese: '何時'},
-                {english: 'first', chinese: '首先'},
-                {english: 'next', chinese: '之後'},
-                {english: 'last', chinese: '最後'},
-                {english: 'seeds', chinese: '種子'},
-                {english: 'roots', chinese: '根'},
-                {english: 'stem', chinese: '莖'},
-                {english: 'leaves', chinese: '葉'},
-                {english: 'flower', chinese: '花'},
-                {english: 'plant', chinese: '植物；種植'},
-                {english: 'water', chinese: '水'},
-                {english: 'grow', chinese: '成長、生長'},
-                {english: 'sunlight', chinese: '陽光'},
                 {english: 'soil', chinese: '土壤'},
                 {english: 'size', chinese: '尺寸'},
                 {english: 'colour', chinese: '顏色'},
                 {english: 'texture', chinese: '質地'}
             ],
             week5: [
-                {english: 'is', chinese: '是（be動詞單數）'},
-                {english: 'are', chinese: '是（be動詞複數）'},
-                {english: 'has', chinese: '擁有（單數）'},
-                {english: 'have', chinese: '擁有（複數）'},
-                {english: 'who', chinese: '誰'},
-                {english: 'what', chinese: '什麼'},
-                {english: 'where', chinese: '哪裡'},
-                {english: 'when', chinese: '何時'},
-                {english: 'first', chinese: '首先'},
-                {english: 'next', chinese: '之後'},
-                {english: 'last', chinese: '最後'},
-                {english: 'rough', chinese: '粗糙的'},
-                {english: 'smooth', chinese: '平滑的'},
                 {english: 'soft', chinese: '柔軟的'},
                 {english: 'hard', chinese: '堅硬的'},
-                {english: 'big', chinese: '大的'},
                 {english: 'giant', chinese: '巨大的'},
                 {english: 'huge', chinese: '龐大的'},
-                {english: 'tiny', chinese: '極小的'},
-                {english: 'small', chinese: '小的'}
+/
             ],
             week6: [
-                {english: 'is', chinese: '是（be動詞單數）'},
-                {english: 'are', chinese: '是（be動詞複數）'},
-                {english: 'has', chinese: '擁有（單數）'},
-                {english: 'have', chinese: '擁有（複數）'},
-                {english: 'who', chinese: '誰'},
-                {english: 'what', chinese: '什麼'},
-                {english: 'where', chinese: '哪裡'},
-                {english: 'when', chinese: '何時'},
-                {english: 'first', chinese: '首先'},
-                {english: 'next', chinese: '之後'},
-                {english: 'last', chinese: '最後'},
-                {english: 'rough', chinese: '粗糙的'},
-                {english: 'smooth', chinese: '平滑的'},
-                {english: 'soft', chinese: '柔軟的'},
-                {english: 'hard', chinese: '堅硬的'},
-                {english: 'big', chinese: '大的'},
-                {english: 'giant', chinese: '巨大的'},
-                {english: 'huge', chinese: '龐大的'},
-                {english: 'tiny', chinese: '極小的'},
-                {english: 'small', chinese: '小的'},
                 {english: 'feel', chinese: '感覺、感受'},
                 {english: 'look', chinese: '看'}
             ],
@@ -537,71 +556,22 @@
                 {english: 'sound', chinese: '聲音'}
             ],
             week10: [
-                {english: 'more', chinese: '更多；更加'},
-                {english: 'put', chinese: '放置'},
-                {english: 'see', chinese: '看（到）'},
-                {english: 'this', chinese: '這（個）'},
-                {english: 'always', chinese: '一直；永遠'},
-                {english: 'because', chinese: '因為'},
-                {english: 'can', chinese: '能夠；可以'},
-                {english: 'before', chinese: '之前'},
-                {english: 'could', chinese: '能夠；可以（過去式）'},
-                {english: 'senses', chinese: '感官'},
-                {english: 'touch', chinese: '觸覺；觸摸'},
-                {english: 'taste', chinese: '味覺；嘗（到）'},
-                {english: 'sight', chinese: '視覺'},
-                {english: 'smell', chinese: '嗅覺；聞（到）'},
-                {english: 'hear', chinese: '聽（到）'},
-                {english: 'sound', chinese: '聲音'},
                 {english: 'loud', chinese: '大聲'},
                 {english: 'quiet', chinese: '小聲；安靜'},
                 {english: 'silent', chinese: '無聲；寂靜'},
                 {english: 'whisper', chinese: '耳語；低聲說話'}
             ],
             week11: [
-                {english: 'more', chinese: '更多；更加'},
-                {english: 'put', chinese: '放置'},
-                {english: 'see', chinese: '看（到）'},
-                {english: 'this', chinese: '這（個）'},
-                {english: 'always', chinese: '一直；永遠'},
-                {english: 'because', chinese: '因為'},
-                {english: 'can', chinese: '能夠；可以'},
-                {english: 'before', chinese: '之前'},
-                {english: 'could', chinese: '能夠；可以（過去式）'},
-                {english: 'senses', chinese: '感官'},
-                {english: 'touch', chinese: '觸覺；觸摸'},
-                {english: 'taste', chinese: '味覺；嘗（到）'},
-                {english: 'sight', chinese: '視覺'},
-                {english: 'smell', chinese: '嗅覺；聞（到）'},
-                {english: 'hear', chinese: '聽（到）'},
-                {english: 'sound', chinese: '聲音'},
                 {english: 'spicy', chinese: '辛辣的'},
                 {english: 'sour', chinese: '酸的'},
                 {english: 'sweet', chinese: '甜的'},
                 {english: 'salty', chinese: '鹹的'}
             ],
             week13: [
-                {english: 'more', chinese: '更多；更加'},
-                {english: 'put', chinese: '放置'},
-                {english: 'see', chinese: '看（到）'},
-                {english: 'this', chinese: '這（個）'},
-                {english: 'always', chinese: '一直；永遠'},
-                {english: 'because', chinese: '因為'},
-                {english: 'can', chinese: '能夠；可以'},
-                {english: 'before', chinese: '之前'},
-                {english: 'could', chinese: '能夠；可以（過去式）'},
-                {english: 'senses', chinese: '感官'},
-                {english: 'touch', chinese: '觸覺；觸摸'},
-                {english: 'taste', chinese: '味覺；嘗（到）'},
-                {english: 'sight', chinese: '視覺'},
-                {english: 'smell', chinese: '嗅覺；聞（到）'},
-                {english: 'hear', chinese: '聽（到）'},
-                {english: 'sound', chinese: '聲音'},
                 {english: 'soft', chinese: '柔軟的'},
                 {english: 'hard', chinese: '堅硬的'},
                 {english: 'bumpy', chinese: '凹凸的'},
-                {english: 'smooth', chinese: '平滑的'},
-                {english: 'rough', chinese: '粗糙的'}
+
             ]
         };
 
@@ -609,44 +579,68 @@
         let currentWords = [];
         let currentQuestion = 0;
         let score = 0;
-        let selectedWords = [];
-        let matchPairs = [];
+        let selectedWords = []; // 用於儲存選定週次的單字
+        let matchPairs = []; // 用於配對遊戲
 
+        /**
+         * 根據下拉選單選擇的週次獲取單字列表
+         * @returns {Array<Object>} 包含英文和中文的單字物件陣列
+         */
         function getSelectedWords() {
             const weekSelect = document.getElementById('weekSelect').value;
             let words = [];
             
             if (weekSelect === 'all') {
-                for (let week in vocabulary) {
-                    words = words.concat(vocabulary[week]);
+                // 如果選擇「所有單字」，則合併所有類別的單字
+                for (let category in vocabulary) {
+                    words = words.concat(vocabulary[category]);
                 }
             } else {
+                // 否則，只獲取選定類別的單字
                 words = vocabulary[weekSelect] || [];
             }
             
-            return words;
+            // 過濾重複的單字，因為「所有單字」選項可能會導致重複
+            const uniqueWords = [];
+            const seen = new Set();
+            words.forEach(word => {
+                const key = `${word.english}-${word.chinese}`;
+                if (!seen.has(key)) {
+                    uniqueWords.push(word);
+                    seen.add(key);
+                }
+            });
+            return uniqueWords;
         }
 
+        /**
+         * 開始遊戲
+         * @param {string} gameType - 遊戲類型 ('quiz', 'typing', 'match')
+         */
         function startGame(gameType) {
             currentGame = gameType;
-            selectedWords = getSelectedWords();
-            
+            selectedWords = getSelectedWords(); // 獲取選定的單字
+
+            // 檢查是否有單字可供練習
             if (selectedWords.length === 0) {
-                alert('請先選擇週數！');
+                // 使用自定義訊息框替代 alert
+                showMessageBox('沒有可用的單字，請選擇其他週次或分類！');
                 return;
             }
 
+            // 打亂單字順序並取前10個（或所有，如果不足10個）
             currentWords = shuffleArray([...selectedWords]).slice(0, Math.min(10, selectedWords.length));
             currentQuestion = 0;
             score = 0;
             
+            // 顯示遊戲區域並更新分數板
             document.getElementById('gameArea').style.display = 'block';
             document.getElementById('total').textContent = currentWords.length;
             updateProgress();
-            document.getElementById('score').textContent = score; // Reset score display
-            document.getElementById('current').textContent = currentQuestion + 1; // Reset current question display
+            document.getElementById('score').textContent = score; // 重置得分顯示
+            document.getElementById('current').textContent = currentQuestion + 1; // 重置目前題數顯示
             
-            // 隱藏所有遊戲區域
+            // 隱藏所有遊戲區域，只顯示當前遊戲類型
             document.getElementById('quizArea').style.display = 'none';
             document.getElementById('typingArea').style.display = 'none';
             document.getElementById('matchArea').style.display = 'none';
@@ -663,6 +657,9 @@
             }
         }
 
+        /**
+         * 顯示選擇題問題
+         */
         function showQuizQuestion() {
             if (currentQuestion >= currentWords.length) {
                 showFinalScore();
@@ -670,38 +667,49 @@
             }
 
             const word = currentWords[currentQuestion];
+            // 獲取除了正確答案之外的3個錯誤答案
             const wrongAnswers = getWrongAnswers(word.chinese, 3);
+            // 將正確答案和錯誤答案合併並打亂
             const allOptions = shuffleArray([word.chinese, ...wrongAnswers]);
 
-            document.getElementById('question').textContent = word.english;
+            document.getElementById('question').textContent = word.english; // 顯示英文單字
             
             const optionsDiv = document.getElementById('options');
-            optionsDiv.innerHTML = '';
+            optionsDiv.innerHTML = ''; // 清空選項
             
+            // 動態創建選項按鈕
             allOptions.forEach(option => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.textContent = option;
-                btn.onclick = () => checkAnswer(option, word.chinese, btn);
+                btn.onclick = () => checkAnswer(option, word.chinese, btn); // 綁定點擊事件
                 optionsDiv.appendChild(btn);
             });
 
+            // 重置回饋訊息和下一題按鈕狀態
             document.getElementById('feedback').textContent = '';
-            document.getElementById('feedback').className = 'feedback'; // Reset feedback class
+            document.getElementById('feedback').className = 'feedback';
             document.getElementById('nextBtn').style.display = 'none';
         }
 
+        /**
+         * 檢查選擇題答案
+         * @param {string} selected - 玩家選擇的答案
+         * @param {string} correct - 正確答案
+         * @param {HTMLElement} btnElement - 玩家點擊的按鈕元素
+         */
         function checkAnswer(selected, correct, btnElement) {
             const buttons = document.querySelectorAll('.option-btn');
-            buttons.forEach(btn => btn.onclick = null); // Disable all buttons after selection
+            buttons.forEach(btn => btn.onclick = null); // 點擊後禁用所有選項按鈕
 
             if (selected === correct) {
-                btnElement.classList.add('correct');
+                btnElement.classList.add('correct'); // 標記為正確
                 document.getElementById('feedback').textContent = '正確！太棒了！🎉';
                 document.getElementById('feedback').className = 'feedback correct';
-                score++;
+                score++; // 增加得分
             } else {
-                btnElement.classList.add('wrong');
+                btnElement.classList.add('wrong'); // 標記為錯誤
+                // 顯示正確答案
                 buttons.forEach(btn => {
                     if (btn.textContent === correct) {
                         btn.classList.add('correct');
@@ -711,10 +719,13 @@
                 document.getElementById('feedback').className = 'feedback wrong';
             }
 
-            document.getElementById('score').textContent = score;
-            document.getElementById('nextBtn').style.display = 'block';
+            document.getElementById('score').textContent = score; // 更新得分顯示
+            document.getElementById('nextBtn').style.display = 'block'; // 顯示下一題按鈕
         }
 
+        /**
+         * 顯示拼字練習問題
+         */
         function showTypingQuestion() {
             if (currentQuestion >= currentWords.length) {
                 showFinalScore();
@@ -722,13 +733,14 @@
             }
 
             const word = currentWords[currentQuestion];
-            document.getElementById('typingQuestion').textContent = `請輸入「${word.chinese}」的英文：`;
-            document.getElementById('typingInput').value = '';
-            document.getElementById('typingFeedback').textContent = '';
-            document.getElementById('typingFeedback').className = 'feedback'; // Reset feedback class
-            document.getElementById('typingNextBtn').style.display = 'none';
+            document.getElementById('typingQuestion').textContent = `請輸入「${word.chinese}」的英文：`; // 顯示中文意思
+            document.getElementById('typingInput').value = ''; // 清空輸入框
+            document.getElementById('typingInput').disabled = false; // 啟用輸入框
+            document.getElementById('typingFeedback').textContent = ''; // 清空回饋訊息
+            document.getElementById('typingFeedback').className = 'feedback';
+            document.getElementById('typingNextBtn').style.display = 'none'; // 隱藏下一題按鈕
             
-            // Remove previous event listener to prevent multiple bindings
+            // 移除舊的事件監聽器並添加新的，以避免重複綁定
             const oldInput = document.getElementById('typingInput');
             const newInput = oldInput.cloneNode(true);
             oldInput.parentNode.replaceChild(newInput, oldInput);
@@ -737,15 +749,18 @@
                     checkTyping();
                 }
             });
-            document.getElementById('typingInput').focus(); // Auto-focus input field
+            document.getElementById('typingInput').focus(); // 自動聚焦輸入框
         }
 
+        /**
+         * 檢查拼字答案
+         */
         function checkTyping() {
             const inputElement = document.getElementById('typingInput');
-            const input = inputElement.value.trim().toLowerCase();
-            const correct = currentWords[currentQuestion].english.toLowerCase();
+            const input = inputElement.value.trim().toLowerCase(); // 獲取輸入並轉為小寫
+            const correct = currentWords[currentQuestion].english.toLowerCase(); // 正確答案轉為小寫
 
-            inputElement.disabled = true; // Disable input after checking
+            inputElement.disabled = true; // 檢查後禁用輸入框
             
             if (input === correct) {
                 document.getElementById('typingFeedback').textContent = '正確！很棒！🎉';
@@ -760,13 +775,11 @@
             document.getElementById('typingNextBtn').style.display = 'block';
         }
 
+        /**
+         * 顯示配對遊戲
+         */
         function showMatchGame() {
-            if (currentQuestion >= currentWords.length) {
-                showFinalScore();
-                return;
-            }
-
-            // 取4個單字進行配對，如果剩餘單字不足4個，則取所有剩餘單字
+            // 從 currentWords 中取最多4個單字進行配對
             const wordsForMatch = currentWords.slice(currentQuestion, currentQuestion + 4);
             // 確保每次配對遊戲都有足夠的單字，至少2個才能玩
             if (wordsForMatch.length < 2) {
@@ -774,78 +787,88 @@
                 return;
             }
 
+            // 打亂英文單字和中文意思的順序，並將原始英文單字儲存在 dataset 中用於配對
             const englishWords = shuffleArray(wordsForMatch.map(w => ({originalEnglish: w.english, display: w.english})));
             const chineseWords = shuffleArray(wordsForMatch.map(w => ({originalEnglish: w.english, display: w.chinese})));
 
+            // 清空配對區域
             document.getElementById('englishWords').innerHTML = '';
             document.getElementById('chineseWords').innerHTML = '';
 
+            // 創建英文單字配對項目
             englishWords.forEach(word => {
                 const div = document.createElement('div');
                 div.className = 'match-item';
                 div.textContent = word.display;
-                div.dataset.originalEnglish = word.originalEnglish; // Store original English for matching
+                div.dataset.originalEnglish = word.originalEnglish; // 儲存原始英文單字
                 div.onclick = () => selectMatchItem(div, 'english', word.originalEnglish);
                 document.getElementById('englishWords').appendChild(div);
             });
 
+            // 創建中文意思配對項目
             chineseWords.forEach(word => {
                 const div = document.createElement('div');
                 div.className = 'match-item';
                 div.textContent = word.display;
-                div.dataset.originalEnglish = word.originalEnglish; // Store original English for matching
+                div.dataset.originalEnglish = word.originalEnglish; // 儲存原始英文單字
                 div.onclick = () => selectMatchItem(div, 'chinese', word.originalEnglish);
                 document.getElementById('chineseWords').appendChild(div);
             });
 
-            selectedMatch = null; // Reset selection
-            selectedType = ''; // Reset selection type
-            matchPairs = []; // Reset matched pairs for this round
-            document.getElementById('matchFeedback').textContent = '';
-            document.getElementById('matchFeedback').className = 'feedback'; // Reset feedback class
-            document.getElementById('matchNextBtn').style.display = 'none';
+            selectedMatch = null; // 重置選中的項目
+            selectedType = ''; // 重置選中類型
+            matchPairs = []; // 重置本輪已配對的對子
+            document.getElementById('matchFeedback').textContent = ''; // 清空回饋訊息
+            document.getElementById('matchFeedback').className = 'feedback';
+            document.getElementById('matchNextBtn').style.display = 'none'; // 隱藏下一組按鈕
         }
 
-        let selectedMatch = null; // {element: HTMLElement, originalEnglish: string}
-        let selectedType = ''; // 'english' or 'chinese'
+        let selectedMatch = null; // 儲存選中的配對項目 {element: HTMLElement, originalEnglish: string}
+        let selectedType = ''; // 儲存選中項目的類型 ('english' or 'chinese')
 
+        /**
+         * 處理配對遊戲項目選擇
+         * @param {HTMLElement} element - 點擊的項目元素
+         * @param {string} type - 項目類型 ('english' or 'chinese')
+         * @param {string} originalEnglishWord - 該項目對應的原始英文單字
+         */
         function selectMatchItem(element, type, originalEnglishWord) {
-            if (element.classList.contains('matched')) return; // Already matched, do nothing
+            if (element.classList.contains('matched')) return; // 如果已經配對成功，則不做任何事
 
-            // Remove 'selected' class from previously selected item of the same type
+            // 移除同類型其他已選中項目的 'selected' class
             document.querySelectorAll(`.match-column .match-item.selected`).forEach(item => {
-                if (item !== element) { // Don't deselect the current element if it was already selected
+                if (item !== element) {
                      item.classList.remove('selected');
                 }
             });
 
 
             if (selectedMatch && selectedType !== type) {
-                // We have a selected item from the other column, try to match
+                // 如果已經選中了一個不同類型的項目，嘗試配對
                 const isCorrect = selectedMatch.originalEnglish === originalEnglishWord;
                 
                 if (isCorrect) {
-                    selectedMatch.element.classList.add('matched');
-                    element.classList.add('matched');
+                    selectedMatch.element.classList.add('matched'); // 標記為已配對
+                    element.classList.add('matched'); // 標記為已配對
                     document.getElementById('matchFeedback').textContent = '配對成功！👍';
                     document.getElementById('matchFeedback').className = 'feedback correct';
-                    score++;
+                    score++; // 增加得分
                     document.getElementById('score').textContent = score;
 
-                    // Check if all pairs in the current round are matched
-                    const currentRoundItems = document.querySelectorAll('#englishWords .match-item').length;
-                    const matchedItems = document.querySelectorAll('.match-item.matched').length;
+                    // 檢查本輪是否所有配對都已完成
+                    const currentRoundItemsCount = document.querySelectorAll('#englishWords .match-item').length;
+                    const matchedItemsCount = document.querySelectorAll('.match-item.matched').length;
 
-                    if (matchedItems === currentRoundItems * 2) { // Each pair consists of 2 items
-                        document.getElementById('matchFeedback').textContent = '全部配對正確！🎉';
+                    if (matchedItemsCount === currentRoundItemsCount * 2) { // 每對包含2個項目
+                        document.getElementById('matchFeedback').textContent = '全部配對正確！�';
                         document.getElementById('matchFeedback').className = 'feedback correct';
-                        document.getElementById('matchNextBtn').style.display = 'block';
-                        currentQuestion += currentRoundItems; // Advance question by number of words in this round
+                        document.getElementById('matchNextBtn').style.display = 'block'; // 顯示下一組按鈕
+                        currentQuestion += currentRoundItemsCount; // 根據本輪單字數量推進題數
                     }
                 } else {
                     document.getElementById('matchFeedback').textContent = '配對錯誤，請再試一次！';
                     document.getElementById('matchFeedback').className = 'feedback wrong';
-                    // Briefly highlight wrong selection then remove
+                    // 短暫高亮錯誤選擇，然後移除高亮
                     element.classList.add('wrong');
                     selectedMatch.element.classList.add('wrong');
                     setTimeout(() => {
@@ -854,63 +877,76 @@
                     }, 500);
                 }
                 
-                selectedMatch = null; // Reset for next selection
+                selectedMatch = null; // 重置選中狀態
                 selectedType = '';
             } else {
-                // Select the current item
+                // 如果沒有選中或選中同類型的項目，則選擇當前項目
                 element.classList.add('selected');
                 selectedMatch = {element: element, originalEnglish: originalEnglishWord};
                 selectedType = type;
-                document.getElementById('matchFeedback').textContent = ''; // Clear previous feedback
-                document.getElementById('matchFeedback').className = 'feedback'; // Reset feedback class
+                document.getElementById('matchFeedback').textContent = ''; // 清除之前的回饋訊息
+                document.getElementById('matchFeedback').className = 'feedback';
             }
         }
 
+        /**
+         * 進入下一題或下一組配對
+         */
         function nextQuestion() {
-            // For match game, currentQuestion is already advanced in selectMatchItem
-            // For quiz and typing, increment here
+            // 配對遊戲的 currentQuestion 已在 selectMatchItem 中更新
+            // 選擇題和拼字練習在此處更新
             if (currentGame === 'quiz' || currentGame === 'typing') {
                 currentQuestion++;
             }
             
+            // 更新目前題數顯示，確保不超過總題數
             document.getElementById('current').textContent = Math.min(currentQuestion + 1, currentWords.length);
-            updateProgress();
+            updateProgress(); // 更新進度條
 
             if (currentQuestion >= currentWords.length) {
-                showFinalScore();
+                showFinalScore(); // 遊戲結束
                 return;
             }
 
+            // 根據當前遊戲類型顯示下一題
             if (currentGame === 'quiz') {
                 showQuizQuestion();
             } else if (currentGame === 'typing') {
-                document.getElementById('typingInput').disabled = false; // Re-enable input for next question
+                document.getElementById('typingInput').disabled = false; // 啟用輸入框
                 showTypingQuestion();
             } else if (currentGame === 'match') {
                 showMatchGame();
             }
         }
 
+        /**
+         * 更新進度條
+         */
         function updateProgress() {
             const progress = (currentQuestion / currentWords.length) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
+        /**
+         * 顯示最終得分和遊戲結束訊息
+         */
         function showFinalScore() {
             const percentage = Math.round((score / currentWords.length) * 100);
             let message = '';
             
+            // 根據得分百分比顯示不同訊息
             if (percentage >= 90) {
                 message = '太棒了！你是英文小天才！🌟';
             } else if (percentage >= 70) {
                 message = '很好！繼續加油！👍';
-            } else if (percentage >= 50) {
+            }
+            else if (percentage >= 50) {
                 message = '不錯！多練習會更好！💪';
             } else {
                 message = '加油！多練習就會進步！📚';
             }
 
-            // Hide game areas and show final score in feedback div
+            // 隱藏遊戲區域，顯示最終得分訊息
             document.getElementById('quizArea').style.display = 'none';
             document.getElementById('typingArea').style.display = 'none';
             document.getElementById('matchArea').style.display = 'none';
@@ -924,11 +960,14 @@
                 </div>
                 <button class="submit-btn" onclick="backToMenu()">回到主選單</button>
             `;
-            gameArea.style.display = 'block'; // Make sure gameArea is visible to show score
+            gameArea.style.display = 'block'; // 確保遊戲區域可見以顯示分數
         }
 
+        /**
+         * 返回主選單
+         */
         function backToMenu() {
-            // Reset game area to its initial state
+            // 重置遊戲區域到初始狀態
             const gameArea = document.getElementById('gameArea');
             gameArea.innerHTML = `
                 <div class="score-board">
@@ -983,24 +1022,38 @@
 
                 <button class="submit-btn" onclick="backToMenu()">回到主選單</button>
             `;
-            gameArea.style.display = 'none'; // Hide the game area again
+            gameArea.style.display = 'none'; // 隱藏遊戲區域
+            // 重新初始化週數選擇器（如果需要）
+            document.getElementById('weekSelect').value = 'all'; 
         }
 
+        /**
+         * 獲取除了正確答案之外的指定數量錯誤答案
+         * @param {string} correctAnswer - 正確答案（中文）
+         * @param {number} count - 需要獲取的錯誤答案數量
+         * @returns {Array<string>} 錯誤答案的陣列
+         */
         function getWrongAnswers(correctAnswer, count) {
             const allAnswers = [];
-            for (let week in vocabulary) {
-                vocabulary[week].forEach(word => {
+            // 遍歷所有單字類別，收集所有中文意思
+            for (let category in vocabulary) {
+                vocabulary[category].forEach(word => {
                     if (word.chinese !== correctAnswer) {
                         allAnswers.push(word.chinese);
                     }
                 });
             }
             
-            // Filter out duplicates and then shuffle
+            // 過濾重複的答案，然後打亂並取指定數量
             const uniqueAnswers = [...new Set(allAnswers)];
             return shuffleArray(uniqueAnswers).slice(0, count);
         }
 
+        /**
+         * 打亂陣列順序
+         * @param {Array<any>} array - 要打亂的陣列
+         * @returns {Array<any>} 打亂後的陣列副本
+         */
         function shuffleArray(array) {
             const newArray = [...array];
             for (let i = newArray.length - 1; i > 0; i--) {
@@ -1009,6 +1062,43 @@
             }
             return newArray;
         }
+
+        /**
+         * 自定義訊息框，替代 alert
+         * @param {string} message - 顯示的訊息
+         */
+        function showMessageBox(message) {
+            // 這裡可以實現一個更美觀的模態框，而不是簡單的 console.log
+            // 例如：創建一個 div 元素，設置樣式並添加到 body，然後在用戶點擊確定後移除
+            const existingMessageBox = document.getElementById('customMessageBox');
+            if (existingMessageBox) {
+                existingMessageBox.remove();
+            }
+
+            const messageBox = document.createElement('div');
+            messageBox.id = 'customMessageBox';
+            messageBox.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                text-align: center;
+                max-width: 90%;
+                font-size: 1.2em;
+                color: #333;
+            `;
+            messageBox.innerHTML = `
+                <p style="margin-bottom: 20px;">${message}</p>
+                <button class="submit-btn" onclick="document.getElementById('customMessageBox').remove()">確定</button>
+            `;
+            document.body.appendChild(messageBox);
+        }
+
     </script>
 </body>
 </html>
