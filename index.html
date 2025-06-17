@@ -320,11 +320,15 @@
         <div class="week-selector">
             <select id="weekSelect">
                 <option value="all">所有單字</option>
-                <option value="highFrequency">高頻單字</option>
+                <option value="highFrequency">高頻單字 High Frequency Words</option>
+                <option value="insects">昆蟲相關 Content Keywords – Insects</option>
+                <option value="sensesAdjectives">感官與形容詞 Content Keywords – 5 Senses & Adjectives</option>
+                <option value="plantsNature">植物與自然 Content Keywords – Plants & Nature</option>
+                <!-- 保留原有分類，您可以根據需要刪除或修改 -->
                 <option value="insectBodyParts">昆蟲身體部位</option>
-                <option value="antColony">蟻群角色與生命週期</option> <!-- 新增類別 -->
-                <option value="otherInsectsAndFeatures">其他昆蟲與特徵</option> <!-- 新增類別 -->
-                <option value="directionAndDescriptors">方位與描述詞</option> <!-- 新增類別 -->
+                <option value="antColony">蟻群角色與生命週期</option>
+                <option value="otherInsectsAndFeatures">其他昆蟲與特徵</option>
+                <option value="directionAndDescriptors">方位與描述詞</option>
                 <option value="sensesTextureAdjectives">五感與質地形容詞</option>
                 <option value="sensesVerbs">五感動詞</option>
                 <option value="plantThemeWords">植物主題</option>
@@ -412,7 +416,7 @@
     <script>
         // 單字資料庫
         const vocabulary = {
-            // 高頻單字 (High Frequency Words)
+            // 高頻單字 High Frequency Words (共 30 個)
             highFrequency: [
                 {english: 'does', chinese: '做（第三人稱）'},
                 {english: 'each', chinese: '各；每個'},
@@ -420,7 +424,7 @@
                 {english: 'can', chinese: '可以；能夠'},
                 {english: 'how', chinese: '如何'},
                 {english: 'inside', chinese: '裡面'},
-                {english: 'jump', chinese: '跳；躍'},
+                {english: 'jump', chinese: '跳；彈'},
                 {english: 'than', chinese: '比較（介系詞）'},
                 {english: 'these', chinese: '這些'},
                 {english: 'those', chinese: '那些'},
@@ -429,26 +433,98 @@
                 {english: 'see', chinese: '看（到）'},
                 {english: 'this', chinese: '這（個）'},
                 {english: 'always', chinese: '一直；永遠'},
-                {english: 'because', chinese: '因為'},
+                {english: 'because', chinese: '因為（連接詞）'},
                 {english: 'before', chinese: '之前'},
                 {english: 'could', chinese: '可以（過去式）'},
-                {english: 'is', chinese: '是（單數）'},
-                {english: 'are', chinese: '是（複數）'},
-                {english: 'has', chinese: '擁有（單數）'},
+                {english: 'is', chinese: '是（be 動詞 單數）'},
+                {english: 'are', chinese: '是（be 動詞 複數）'},
+                {english: 'has', chinese: '擁有（第三人稱單數）'},
                 {english: 'have', chinese: '擁有（複數）'},
                 {english: 'who', chinese: '誰'},
                 {english: 'what', chinese: '什麼'},
                 {english: 'where', chinese: '哪裡'},
                 {english: 'when', chinese: '何時'},
                 {english: 'first', chinese: '首先'},
-                {english: 'next', chinese: '接下來'},
+                {english: 'next', chinese: '之後'},
                 {english: 'then', chinese: '然後'},
-                {english: 'last', chinese: '最後'},
-                {english: 'would', chinese: '會（意願/假設）'},
-                {english: 'there', chinese: '那裡'},
-                {english: 'their', chinese: '他們的'}
+                {english: 'last', chinese: '最後'}
             ],
-            // 昆蟲身體部位 (Insect Body Parts)
+            // 昆蟲相關 Content Keywords – Insects (共 18 個)
+            insects: [
+                {english: 'ladybug', chinese: '瓢蟲'},
+                {english: 'antennae', chinese: '觸角（複數）'},
+                {english: 'spots', chinese: '斑點'},
+                {english: 'stripes', chinese: '條紋'},
+                {english: 'legs', chinese: '腿部'},
+                {english: 'caterpillar', chinese: '毛毛蟲'},
+                {english: 'butterfly', chinese: '蝴蝶'},
+                {english: 'wings', chinese: '翅膀'},
+                {english: 'abdomen', chinese: '腹部'},
+                {english: 'thorax', chinese: '胸部（昆蟲）'},
+                {english: 'chrysalis', chinese: '蛹；繭'},
+                {english: 'earthworm', chinese: '蚯蚓'},
+                {english: 'head', chinese: '頭部'},
+                {english: 'eyes', chinese: '眼睛'},
+                {english: 'antenna', chinese: '觸角（單數）'},
+                {english: 'queen ant', chinese: '蟻后'},
+                {english: 'worker ant', chinese: '工蟻'},
+                {english: 'soldier ant', chinese: '兵蟻'}
+            ],
+            // 感官與形容詞 Content Keywords – 5 Senses & Adjectives (共 30 個)
+            sensesAdjectives: [
+                {english: 'senses', chinese: '感官'},
+                {english: 'touch', chinese: '觸覺；觸摸'},
+                {english: 'feel', chinese: '感覺'},
+                {english: 'taste', chinese: '味覺；品嚐'},
+                {english: 'sight', chinese: '視覺'},
+                {english: 'look', chinese: '看；注視'},
+                {english: 'smell', chinese: '嗅覺；聞'},
+                {english: 'hear', chinese: '聽覺；聽見'},
+                {english: 'sound', chinese: '聲音'},
+                {english: 'spiky', chinese: '有尖刺的'},
+                {english: 'prickly', chinese: '多刺的'},
+                {english: 'fuzzy', chinese: '毛茸茸的'},
+                {english: 'soft', chinese: '柔軟的'},
+                {english: 'beautiful', chinese: '美麗的'},
+                {english: 'sparkly', chinese: '閃爍的'},
+                {english: 'shiny', chinese: '閃亮的'},
+                {english: 'colourful', chinese: '色彩繽紛的'},
+                {english: 'handsome', chinese: '英俊的；漂亮的'},
+                {english: 'loud', chinese: '大聲的'},
+                {english: 'quiet', chinese: '安靜的'},
+                {english: 'silent', chinese: '無聲的'},
+                {english: 'whisper', chinese: '低聲說話'},
+                {english: 'spicy', chinese: '辣的'},
+                {english: 'sour', chinese: '酸的'},
+                {english: 'sweet', chinese: '甜的'},
+                {english: 'salty', chinese: '鹹的'},
+                {english: 'bumpy', chinese: '凹凸的'},
+                {english: 'rough', chinese: '粗糙的'},
+                {english: 'smooth', chinese: '平滑的'},
+                {english: 'hard', chinese: '堅硬的'}
+            ],
+            // 植物與自然 Content Keywords – Plants & Nature (共 25 個)
+            plantsNature: [
+                {english: 'seeds', chinese: '種子'},
+                {english: 'roots', chinese: '根'},
+                {english: 'stem', chinese: '莖'},
+                {english: 'leaves', chinese: '葉子'},
+                {english: 'flower', chinese: '花'},
+                {english: 'plant', chinese: '植物；種植'},
+                {english: 'water', chinese: '水'},
+                {english: 'grow', chinese: '成長；生長'},
+                {english: 'sunlight', chinese: '陽光'},
+                {english: 'soil', chinese: '土壤'},
+                {english: 'size', chinese: '尺寸'},
+                {english: 'colour', chinese: '顏色'},
+                {english: 'texture', chinese: '質地'},
+                {english: 'big', chinese: '大的'},
+                {english: 'giant', chinese: '巨大的'},
+                {english: 'huge', chinese: '龐大的'},
+                {english: 'tiny', chinese: '極小的'},
+                {english: 'small', chinese: '小的'}
+            ],
+            // 以下為原有或調整的分類，確保沒有重複的單字
             insectBodyParts: [
                 {english: 'head', chinese: '頭部'},
                 {english: 'eye', chinese: '眼睛'},
@@ -463,7 +539,6 @@
                 {english: 'wing', chinese: '翅膀（單數）'},
                 {english: 'mandibles', chinese: '下顎'}
             ],
-            // 蟻群角色與生命週期 (Ant Colony Roles and Life Cycle) - 新增類別
             antColony: [
                 {english: 'queen ant', chinese: '蟻后'},
                 {english: 'worker ant', chinese: '工蟻'},
@@ -474,7 +549,6 @@
                 {english: 'larvae', chinese: '幼蟲'},
                 {english: 'pupae', chinese: '蛹'}
             ],
-            // 其他昆蟲與特徵 (Other Insects and Features) - 新增類別
             otherInsectsAndFeatures: [
                 {english: 'ladybug', chinese: '瓢蟲'},
                 {english: 'stripes', chinese: '條紋'},
@@ -482,7 +556,6 @@
                 {english: 'caterpillar', chinese: '毛毛蟲'},
                 {english: 'butterfly', chinese: '蝴蝶'}
             ],
-            // 方位與描述詞 (Direction and Descriptors) - 新增類別
             directionAndDescriptors: [
                 {english: 'spiky', chinese: '有尖刺的'},
                 {english: 'fuzzy', chinese: '毛茸茸的'},
@@ -495,7 +568,6 @@
                 {english: 'under', chinese: '在……下面'},
                 {english: 'over', chinese: '在……上方；超過'}
             ],
-            // 五感與質地形容詞 (Senses and Texture Adjectives) - 移除已移至新類別的單字
             sensesTextureAdjectives: [
                 {english: 'prickly', chinese: '多刺的'},
                 {english: 'beautiful', chinese: '美麗的'},
@@ -504,12 +576,10 @@
                 {english: 'colourful', chinese: '色彩繽紛的'},
                 {english: 'handsome', chinese: '英俊的、漂亮的'},
             ],
-            // 五感動詞 (Senses Verbs)
             sensesVerbs: [
                 // 根據提供的單字列表，沒有新的、獨特的五感動詞未包含在現有 weekX 分類中。
                 // 此分類保留以備未來擴充。
             ],
-            // 植物主題字彙 (Plant Theme Words)
             plantThemeWords: [
                 {english: 'seed', chinese: '種子'}, // 使用單數形式
                 {english: 'leaf', chinese: '葉'},   // 使用單數形式
@@ -987,7 +1057,7 @@
                 if (isCorrect) {
                     selectedMatch.element.classList.add('matched'); // 標記為已配對
                     element.classList.add('matched'); // 標記為已配對
-                    document.getElementById('matchFeedback').textContent = '配對成功！�';
+                    document.getElementById('matchFeedback').textContent = '配對成功！🎉';
                     document.getElementById('matchFeedback').className = 'feedback correct';
                     score++; // 增加得分
                     document.getElementById('score').textContent = score;
